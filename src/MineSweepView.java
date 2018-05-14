@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 public class MineSweepView extends JFrame implements ActionListener {
 
     private MineSweepModelAndController modelAndController;
-    private JButton replay;
+    private JButton newGame, replay;
     private JButton[][] cells;
     private int row;
     private int column;
@@ -25,7 +25,9 @@ public class MineSweepView extends JFrame implements ActionListener {
 
     private void newInstance(int row, int column, int numOfMines) {
         JPanel functionPanel = new JPanel(new GridLayout(1, 1));
+        this.newGame = new JButton("New Game");
         this.replay = new JButton("Replay");
+        functionPanel.add(this.newGame);
         functionPanel.add(this.replay);
         JPanel cellPanel = new JPanel(new GridLayout(row, column));
         this.cells = new JButton[row][column];
@@ -47,6 +49,7 @@ public class MineSweepView extends JFrame implements ActionListener {
                 this.cells[i][j].addActionListener(this);
             }
         }
+        this.newGame.addActionListener(this);
         this.replay.addActionListener(this);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,6 +74,9 @@ public class MineSweepView extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent event) {
         Object source = event.getSource();
         if (source == this.replay) {
+            this.resetButton();
+            this.modelAndController.resetInstance();
+        } else if (source == this.newGame) {
             this.resetButton();
             this.modelAndController.newInstance(this.row, this.column,
                     this.numOfMines);
