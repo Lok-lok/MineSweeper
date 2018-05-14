@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class MineSweepModelAndController {
 
     private final MineSweepView view;
@@ -18,7 +20,7 @@ public class MineSweepModelAndController {
                 this.board[i][j] = 'E';
             }
         }
-        frgv.numOfMines = numOfMines;
+        this.numOfMines = numOfMines;
         this.created = false;
     }
 
@@ -76,86 +78,45 @@ public class MineSweepModelAndController {
         }
         return count;
     }
-    
+
     private void updateBoard(int[] click) {
+        Stack<int[]> s = new Stack<>();
         switch (this.board[click[0]][click[1]]) {
             case 'M':
                 this.board[click[0]][click[1]] = 'X';
                 break;
             case 'E':
                 this.board[click[0]][click[1]] = 'B';
-                int count = 0;
-                int rowStart = click[0] - 1;
-                int rowEnd = click[0] + 1;
-                int columnStart = click[1] - 1;
-                int columnEnd = click[1] + 1;
-                if (rowStart < 0) {
-                    rowStart = 0;
-                }
-                if (columnStart < 0) {
-                    columnStart = 0;
-                }
-                if (rowEnd >= this.board.length) {
-                    rowEnd = this.board.length - 1;
-                }
-                if (columnEnd >= this.board[0].length) {
-                    columnEnd = this.board[0].length - 1;
-                }
-                for (int i = rowStart; i <= rowEnd; i++) {
-                    for (int j = columnStart; j <= columnEnd; j++) {
-                        if (this.board[i][j] == 'M') {
-                            count++;
-                        }
-                    }
-                }
+                int count = this.count(click);
                 if (count > 0) {
                     this.board[click[0]][click[1]] = (char) (count + '0');
-                    for (int i = rowStart; i <= rowEnd; i++) {
-                        for (int j = columnStart; j <= columnEnd; j++) {
-                            if (this.board[i][j] == 'E') {
-                                int newRowStart = i - 1;
-                                int newRowEnd = i + 1;
-                                int newColumnStart = j - 1;
-                                int newColumnEnd = j + 1;
-
-                                if (newRowStart < 0) {
-                                    newRowStart = 0;
-                                }
-                                if (newColumnStart < 0) {
-                                    newColumnStart = 0;
-                                }
-                                if (newRowEnd >= this.board.length) {
-                                    newRowEnd = this.board.length - 1;
-                                }
-                                if (newColumnEnd >= this.board[0].length) {
-                                    newColumnEnd = this.board[0].length - 1;
-                                }
-                                boolean keepGoing = true;
-                                for (int m = newRowStart; m <= newRowEnd; m++) {
-                                    for (int n = newColumnStart; n <= newColumnEnd; n++) {
-                                        if (this.board[m][n] == 'M') {
-                                            keepGoing = false;
-                                        }
-                                    }
-                                }
-                                if (keepGoing) {
-                                    int[] thisChange = { i, j };
-                                    this.updateBoard(thisChange);
-                                }
+                }
+                s.add(click);
+                break;
+        }
+        while (s.size() > 0) {
+            int[] loc = s.pop();
+            int count = this.board[loc[0]][loc[1]] - '0';
+            if (count == 18) {
+                count = 0;
+            }
+            for (int i = loc[0] - 1; i <= loc[0] + 1
+                    && i < this.board.length; i++) {
+                for (int j = loc[1] - 1; j <= loc[1] + 1
+                        && j < this.board[0].length; j++) {
+                    if (i >= 0 && j >= 0 && this.board[i][j] == 'E') {
+                        int[] newLoc = { i, j };
+                        int newCount = this.count(newLoc);
+                        if (count == 0 || newCount == 0) {
+                            this.board[i][j] = 'B';
+                            if (newCount > 0) {
+                                this.board[i][j] = (char) (newCount + '0');
                             }
-                        }
-                    }
-                } else {
-                    for (int i = rowStart; i <= rowEnd; i++) {
-                        for (int j = columnStart; j <= columnEnd; j++) {
-                            if (this.board[i][j] == 'E') {
-                                int[] thisChange = { i, j };
-                                this.updateBoard(thisChange);
-                            }
+                            s.push(newLoc);
                         }
                     }
                 }
-                break;
+            }
         }
     }
 
