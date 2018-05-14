@@ -22,6 +22,25 @@ public class MineSweepModelAndController {
         this.created = false;
     }
 
+    public void resetInstance() {
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[i].length; j++) {
+                char c = this.board[i][j];
+                switch (c) {
+                    case 'X':
+                        this.board[i][j] = 'M';
+                        break;
+                    case 'M':
+                        break;
+                    case 'E':
+                        break;
+                    default:
+                        this.board[i][j] = 'E';
+                }
+            }
+        }
+    }
+
     public void updateView(int[] click) {
         if (!this.created) {
             this.setMines(click);
