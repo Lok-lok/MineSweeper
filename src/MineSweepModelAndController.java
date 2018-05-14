@@ -100,24 +100,25 @@ public class MineSweepModelAndController {
             if (count == 18) {
                 count = 0;
             }
-            for (int i = loc[0] - 1; i <= loc[0] + 1
-                    && i < this.board.length; i++) {
-                for (int j = loc[1] - 1; j <= loc[1] + 1
-                        && j < this.board[0].length; j++) {
-                    if (i >= 0 && j >= 0 && this.board[i][j] == 'E') {
-                        int[] newLoc = { i, j };
-                        int newCount = this.count(newLoc);
-                        if (count == 0 || newCount == 0) {
-                            this.board[i][j] = 'B';
-                            if (newCount > 0) {
-                                this.board[i][j] = (char) (newCount + '0');
-                            }
-                            s.push(newLoc);
+            int[][] offsets = { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 },
+                    { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
+            for (int i = 0; i < offsets.length; i++) {
+                int[] newLoc = { loc[0] + offsets[i][0],
+                        loc[1] + offsets[i][1] };
+                if (newLoc[0] >= 0 && newLoc[0] < this.board.length
+                        && newLoc[1] >= 0 && newLoc[1] < this.board[0].length
+                        && this.board[newLoc[0]][newLoc[1]] == 'E') {
+                    int newCount = this.count(newLoc);
+                    if (count == 0 || i < 4 && newCount == 0) {
+                        this.board[newLoc[0]][newLoc[1]] = 'B';
+                        if (newCount > 0) {
+                            this.board[newLoc[0]][newLoc[1]] = (char) (newCount
+                                    + '0');
                         }
+                        s.push(newLoc);
                     }
                 }
             }
         }
     }
-
 }
