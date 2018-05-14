@@ -97,19 +97,17 @@ public class MineSweepView extends JFrame implements ActionListener {
         int countRevealedEmpty = 0;
         for (int i = 0; i < this.row; i++) {
             for (int j = 0; j < this.column; j++) {
-                if (board[i][j] == 'B') {
+                if (board[i][j] != 'E' && board[i][j] != 'M') {
                     this.cells[i][j].setEnabled(false);
                     countRevealedEmpty++;
-                } else if (board[i][j] <= 56) {
-                    this.cells[i][j].setEnabled(false);
+                }
+                if (board[i][j] <= 56) {
                     this.cells[i][j].setText(Character.toString(board[i][j]));
-                    countRevealedEmpty++;
                 } else if (board[i][j] == 'X') {
-                    this.cells[i][j].setEnabled(false);
                     this.cells[i][j].setText("Bomb");
                     explode = true;
+                    countRevealedEmpty--;
                 }
-
             }
         }
         if (explode) {
