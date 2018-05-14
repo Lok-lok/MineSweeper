@@ -18,7 +18,7 @@ public class MineSweepModelAndController {
                 this.board[i][j] = 'E';
             }
         }
-        this.numOfMines = numOfMines;
+        frgv.numOfMines = numOfMines;
         this.created = false;
     }
 
@@ -63,6 +63,20 @@ public class MineSweepModelAndController {
         this.created = true;
     }
 
+    private int count(int[] loc) {
+        int count = 0;
+        for (int i = loc[0] - 1; i <= loc[0] + 1
+                && i < this.board.length; i++) {
+            for (int j = loc[1] - 1; j <= loc[1] + 1
+                    && j < this.board[0].length; j++) {
+                if (i >= 0 && j >= 0 && this.board[i][j] == 'M') {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
     private void updateBoard(int[] click) {
         switch (this.board[click[0]][click[1]]) {
             case 'M':
