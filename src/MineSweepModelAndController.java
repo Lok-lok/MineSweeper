@@ -91,7 +91,9 @@ public class MineSweepModelAndController {
                 if (count > 0) {
                     this.board[click[0]][click[1]] = (char) (count + '0');
                 }
-                s.add(click);
+                if (count == 0) {
+                    s.add(click);
+                }
                 break;
         }
         while (s.size() > 0) {
@@ -121,4 +123,5 @@ public class MineSweepModelAndController {
             }
         }
     }
+
 }
