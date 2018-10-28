@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 public class MineSweepView extends JFrame implements ActionListener {
 
     private MineSweepModelAndController modelAndController;
-    private JButton newGame, replay;
+    private JButton newGame, replay, exitGame;
     private JButton[][] cells;
     private int row;
     private int column;
@@ -27,8 +27,10 @@ public class MineSweepView extends JFrame implements ActionListener {
         JPanel functionPanel = new JPanel(new GridLayout(1, 1));
         this.newGame = new JButton("New Game");
         this.replay = new JButton("Replay");
+        this.exitGame = new JButton("Exit Game");
         functionPanel.add(this.newGame);
         functionPanel.add(this.replay);
+        functionPanel.add(this.exitGame);
         JPanel cellPanel = new JPanel(new GridLayout(row, column));
         this.cells = new JButton[row][column];
         for (int i = 0; i < row; i++) {
@@ -51,6 +53,7 @@ public class MineSweepView extends JFrame implements ActionListener {
         }
         this.newGame.addActionListener(this);
         this.replay.addActionListener(this);
+        this.exitGame.addActionListener(this);
         this.pack();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -80,6 +83,8 @@ public class MineSweepView extends JFrame implements ActionListener {
             this.resetButton();
             this.modelAndController.newInstance(this.row, this.column,
                     this.numOfMines);
+        } else if (source == this.exitGame) {
+            System.exit(0);
         } else {
             for (int i = 0; i < this.row; i++) {
                 for (int j = 0; j < this.column; j++) {
